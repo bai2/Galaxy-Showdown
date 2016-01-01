@@ -169,8 +169,8 @@ exports.commands = {
 				options.push(params[i]);
 			}
 
-			if (options.length > 11) {
-				return this.errorReply("Too many options for poll (maximum is 11).");
+			if (options.length > 8) {
+				return this.errorReply("Too many options for poll (maximum is 8).");
 			}
 
 			room.poll = new Poll(room, params[0], options);
@@ -271,62 +271,12 @@ exports.commands = {
 			this.parse('/help poll');
 		}
 	},
-	pollhelp: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		return this.sendReplyBox(
-			"/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.<br />" +
-			"The poll status is displayed to the users and updated in real time.<br />" +
-			"Accepts the following commands:<br />" +
-			"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: + % @ # & ~<br />" +
-			"/poll vote [number] - Votes for option [number] (or click the button).<br />" +
-			"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: + % @ # & ~<br />" +
-			"/poll display - Displays the poll<br />" +
-			"/poll end - Ends a poll and displays the results. Requires: + % @ # & ~"
-		);
-	},
-	votes: function(target, room, user) {
-		if (!room.poll) return this.errorReply("There is no poll running in this room.");
-		if (!this.canBroadcast()) return;
-		var votes = room.poll.totalVotes;
-		var lbl = (votes > 1 ? ' VOTES' : ' VOTE');
-		return this.sendReplyBox("TOTAL VOTES: " + votes + lbl);
-	},
-	ep: 'endpoll',
-	endpoll: function(target, room, user) {
-		this.parse('/poll end');
-	},
-	tierpoll: 'tpoll',
-	tpoll: function(target, room, user) {
-		var tiers = ['OU', 'VGC', 'Random Meta', 'Ubers/AG', 'Low Tier', 'Old Gen', 'Other Metagame'];
-		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
-	},
-	lowtierpoll: 'lwtpoll',
-	lwtpoll: function(target, room, user) {
-		var tiers = ['UU', 'RU', 'NU', 'PU', 'LC', 'LC UU'];
-		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
-	},
-	randomtierpoll: 'rtpoll',
-	rtpoll: function(target, room, user) {
-		var tiers = ['Random', 'Random Doubles', 'Random Triples', 'Random Haxmons', 'Random Monotype', 'Random LC', 'Random Ubers', 'Random Monogen', 'Random Inverse', 'Random CAP', 'Random Sky Battle'];
-		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
-	},
-	oldtierpoll: 'otpoll',
-	otpoll: function(target, room, user) {
-		var tiers = ['BW OU', 'DPPT OU', 'RSE OU', 'GSC OU', 'RBY OU'];
-		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
-	},
-	omtierpoll: 'omtpoll',
-	omtpoll: function(target, room, user) {
-		var tiers = ['Monotype', 'CAP', 'Battle Factory', 'AAA', 'Stabmons', 'Inverse Battle', 'Tier Shift', '1v1', 'Metronome', 'CC1v1'];
-		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
-	},
-	botgamepoll: 'bgpoll',
-	bgpoll: function(target, room, user) {
-		var tiers = ['Trivia', 'Hangman', 'Ambush', 'Anagrams', 'BlackJack', 'Kunc', 'Pass-The-Bomb'];
-		this.parse('/poll new Next Bot game?, ' + tiers.sort());
-	},
-	vote: function(target, room, user) {
-		if (!target) return this.errorReply("Usage: /vote [poll option number] - votes for the [option] in the current poll.");
-		this.parse('/poll vote ' + target);
-	}
+	pollhelp: ["/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.",
+				"Accepts the following commands:",
+				"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~",
+				"/poll vote [number] - Votes for option [number].",
+				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~",
+				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
+				"/poll display - Displays the poll",
+				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"]
 };
